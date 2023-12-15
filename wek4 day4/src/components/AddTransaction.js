@@ -30,11 +30,14 @@ export const AddTransaction = () => {
       
       return new Yup.ValidationError('Amount is required', null, 'amount'); // Return false if the value is empty or null
     }
-    if (value.includes('0')) {
-      return new Yup.ValidationError('Amount cannot be zero', null, 'amount');
+    if (value.startsWith('0')) {
+      return new Yup.ValidationError('Amount cannot start with zero', null, 'amount');
     }
     if (!/^\d+(\.\d+)?$/.test(value)) {
       return new Yup.ValidationError('Amount should contain only numbers', null, 'amount');
+    }
+    if (value.replace('.', '').replace('-', '').length > 5) {
+      return new Yup.ValidationError('Amount should have at most five digits', null, 'amount');
     }
     return /^-?\d+(\.\d{1,2})?$/.test(value);
   }
